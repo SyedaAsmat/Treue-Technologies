@@ -28,3 +28,11 @@ The 3 tasks:
    3. JavaScript
    4. JSP
    5. MySQL
+
+#To run projects:
+1. download zip folder -> extract to any location of your choice
+2. Open Eclipse - > Open file - > Open Projects from File System
+3. Look for your saved folder at chosen location
+4. Select it - > now showing in eclipse
+5.  Right click - > set server to run upon (I have used tomcat latest version)
+6.  Running
