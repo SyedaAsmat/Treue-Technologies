@@ -1,0 +1,56 @@
+package moviePackage;
+
+import jakarta.servlet.RequestDispatcher;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+//import java.io.PrintWriter;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+/**
+ * Servlet implementation class RegistrationServlet
+ */
+@WebServlet("/signup")
+public class RegistrationServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String uname = request.getParameter("uname"); /*here we use name attribute of input tag*/
+		String uemail = request.getParameter("uemail");
+		String pwd = request.getParameter("pwd");
+		
+		RequestDispatcher dispatcher = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");//com.mysql.cj.jdbc is package name and Driver.java is class name
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/moviedb?autoReconnect=true&useSSL=false","root","password@123");
+			PreparedStatement pst = con.prepareStatement("insert into users (uname,uemail,pwd) values (?,?,?)");
+			pst.setString(1, uname);
+			pst.setString(2, uemail);
+			pst.setString(3, pwd);
+			
+			int rowCount = pst.executeUpdate();
+			dispatcher = request.getRequestDispatcher("login.jsp");
+			if(rowCount > 0) {
+				request.setAttribute("status", "success");
+			}else {
+				request.setAttribute("status", "failed");
+			}
+			dispatcher.forward(request, response);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+}
+
